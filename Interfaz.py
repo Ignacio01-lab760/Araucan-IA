@@ -31,8 +31,8 @@ RUTA_BANNER = CARPETA / "nasa_x_araucania.png"
 RUTA_DETECCIONES = CARPETA / "detecciones.zip"
 RUTA_POLIGONOS = CARPETA / "poligonos.zip"
 RUTA_CACHE_POL = CARPETA / "geodatos" / "poligonos_cache.pkl"   # se genera solo la primera vez
-RUTA_ORIGINAL = str(CARPETA / "geodatos" / "regiones_chile.geojson")
-RUTA_GEOJSON = str(CARPETA / "geodatos" / "regiones_chile_ligero.geojson")
+RUTA_ORIGINAL = str(CARPETA / "geodatos.zip")
+RUTA_GEOJSON = str(CARPETA / "regiones_chile_ligero.geojson")
 CAMPO_NOMBRE = "REGION"  # si no detecta bien el nombre de la región, escribe aquí la propiedad, ej. "Region"
 TODO_CHILE = "Todo Chile"
 
@@ -238,8 +238,11 @@ CANDIDATOS_NOMBRE = ["Region", "REGION", "region", "Región", "REGIÓN", "NOM_RE
 
 def preparar_geojson_ligero(origen: str, destino: str, campo_forzado=None, tolerancia=0.005):
     """Se ejecuta UNA sola vez: simplifica el GeoJSON pesado y guarda una copia liviana."""
-    with open(origen, encoding="utf-8") as f:
-        gj = json.load(f)
+    import zipfile
+    with zipfile.ZipFile(origen, 'r') as z:
+        archivo_interno = [n for n in z.namelist() if "regiones_chile.geojson" in n][0]
+        with z.open(archivo_interno) as f:
+            gj = json.loads(f.read().decode('utf-8'))
     feats = gj["features"] if gj.get("type") == "FeatureCollection" else [gj]
 
     props0 = feats[0].get("properties") or {}
