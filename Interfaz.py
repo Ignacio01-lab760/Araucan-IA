@@ -331,7 +331,7 @@ def _redondear(coords, n=4):
 
 def preparar_poligonos(origen: Path, destino: Path):
     """Se ejecuta UNA sola vez: lee el GeoJSON grande y guarda una versión compacta (tabla + una geometría por celda)."""
-import zipfile
+     import zipfile
     with zipfile.ZipFile(origen, 'r') as z:
         with z.open(z.namelist()[0]) as f:
             gj = json.loads(f.read().decode('utf-8'))
