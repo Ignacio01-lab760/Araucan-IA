@@ -31,8 +31,8 @@ RUTA_BANNER = CARPETA / "nasa_x_araucania.png"
 RUTA_DETECCIONES = CARPETA / "detecciones.zip"
 RUTA_POLIGONOS = CARPETA / "poligonos.zip"
 RUTA_CACHE_POL = CARPETA / "geodatos" / "poligonos_cache.pkl"   # se genera solo la primera vez
-RUTA_ORIGINAL = str(CARPETA / "geodatos" / "regiones_chile.zip")
-RUTA_GEOJSON = str(CARPETA / "geodatos" / "regiones_chile_ligero.zip")
+RUTA_ORIGINAL = str(CARPETA / "geodatos" / "regiones_chile.geojson")
+RUTA_GEOJSON = str(CARPETA / "geodatos" / "regiones_chile_ligero.geojson")
 CAMPO_NOMBRE = "REGION"  # si no detecta bien el nombre de la región, escribe aquí la propiedad, ej. "Region"
 TODO_CHILE = "Todo Chile"
 
