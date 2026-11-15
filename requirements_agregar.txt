@@ -1,0 +1,7 @@
+# Agrega estas líneas al requirements.txt de tu app Streamlit (sin borrar las que ya tiene)
+scikit-learn==1.9.1
+scipy
+pandas
+numpy
+joblib
+requests

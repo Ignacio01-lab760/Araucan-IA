@@ -1,0 +1,15 @@
+FireWatch para Streamlit - cómo agregarlo a tu app
+
+1) Copia estas 2 cosas dentro de la carpeta de tu app (la que está en GitHub):
+     - la carpeta  firewatch/
+     - el archivo  pages/9_Prediccion.py   (si ya tienes carpeta pages/, déjalo ahí; si no, créala)
+2) Abre requirements_agregar.txt y agrega esas líneas al requirements.txt de tu app (sin borrar las existentes).
+3) Sube los cambios a GitHub. Streamlit Cloud se actualiza solo y aparecerá "Prediccion" en el menú lateral.
+
+Probar antes en tu computador:   streamlit run tu_app.py
+
+Si tu app NO usa carpeta pages/ (un solo archivo con menú propio), en vez del paso del archivo pages/ agrega en tu código:
+     from firewatch.ui import render_prediccion
+     ...
+     if opcion == "Predicción":     # el nombre de tu menú
+         render_prediccion()

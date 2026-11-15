@@ -1,0 +1,52 @@
+{
+  "features": [
+    "det_1d",
+    "det_3d",
+    "det_7d",
+    "det_30d",
+    "frp_3d",
+    "frp_7d",
+    "nb_3d",
+    "nb_7d",
+    "days_since",
+    "clim_month_rate",
+    "rate_all",
+    "doy_sin",
+    "doy_cos",
+    "lat",
+    "lon"
+  ],
+  "zone_deg": 0.25,
+  "metrics": {
+    "test_period": "2023-01-01 a 2026-07-30",
+    "test_rows": 743114,
+    "base_rate": 0.02421297405243341,
+    "model": {
+      "average_precision": 0.279365011118189,
+      "roc_auc": 0.8895979721697209,
+      "ap_quiet_zones": 0.09075714873210784
+    },
+    "baseline_persistence": {
+      "average_precision": 0.19408587860911708
+    },
+    "baseline_climatology": {
+      "average_precision": 0.11218558419491068,
+      "ap_quiet_zones": 0.04393572045311842
+    },
+    "quiet_base_rate": 0.012076487444898946,
+    "thresholds": {
+      "medio": 0.14200989168616732,
+      "alto": 0.4067917905454173
+    },
+    "recall_at_thresholds": {
+      "medio": 0.4091591174345579,
+      "alto": 0.16667592952814983
+    },
+    "precision_at_thresholds": {
+      "medio": 0.25,
+      "alto": 0.5
+    }
+  },
+  "data_start": "2012-01-20",
+  "data_end": "2026-07-30"
+}
