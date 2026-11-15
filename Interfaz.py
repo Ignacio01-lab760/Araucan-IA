@@ -797,22 +797,14 @@ if pagina == "Resumen":
         render_panel()
     render_graficos()
     render_footer()
+
 elif pagina == "Mapa de actividad":
     bloque_mapa(700)
+
 elif pagina == "Calendario":
     card("📅", f"Calendario de actividad ({desde}–{hasta})", fig_calendario(420))
+
 elif pagina == "Estadísticas":
-    render_kpis()
-    e1, e2 = st.columns(2)
-    with e1:
-        card("📊", "Actividad mensual", fig_mensual())
-    with e2:
-        card("📈", "Actividad anual vs. promedio histórico", fig_anual())
-else:
-    st.caption(f"Se muestran las primeras 5.000 filas de {fmt(total)}. Usa «Descargar CSV filtrado» para obtener más.")
-    st.dataframe(df.drop(columns=["año", "mes"]).head(5000), height=520, **STRETCH)
-    render_footer()
-    elif pagina == "Estadísticas":
     render_kpis()
     e1, e2 = st.columns(2)
     with e1:
