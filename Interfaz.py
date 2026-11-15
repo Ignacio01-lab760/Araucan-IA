@@ -431,9 +431,10 @@ def agregar_celdas(region_sel, ini, fin, max_celdas=20000) -> pd.DataFrame:
 if "pagina" not in st.session_state:
     st.session_state.pagina = "Resumen"
 
+# Modifica la lista NAV para que quede así:
 NAV = [("Resumen", ":material/home:"), ("Mapa de actividad", ":material/location_on:"),
        ("Calendario", ":material/calendar_month:"), ("Estadísticas", ":material/bar_chart:"),
-       ("Datos y descargas", ":material/download:")]
+       ("Predicciones", ":material/online_prediction:"), ("Datos y descargas", ":material/download:")]
 with st.sidebar:
     for nombre, icono in NAV:
         activo = st.session_state.pagina == nombre
@@ -463,36 +464,49 @@ st.markdown(H(f"""
 </div>"""), unsafe_allow_html=True)
 
 # ═════════════════════════ Filtros (con botón Aplicar) ═════════════════════════
+# ═════════════════════════ Filtros (con botón Aplicar) ═════════════════════════
 f_min, f_max = df_all["fecha"].min().date(), df_all["fecha"].max().date()
 opciones_region = [TODO_CHILE] + list(regiones.keys())
 idx_region = next((i for i, n in enumerate(opciones_region) if "araucan" in normalizar(n)), 0)
 opciones_fuente = ["Serie armonizada"] + [str(x) for x in df_all["fuente"].cat.categories]
 
 with st.form("filtros", border=False):
-    c = st.columns([0.55, 2.0, 0.55, 1.35, 0.55, 1.35, 0.7, 1.6, 1.6])
-    c[0].markdown('<div class="flabel">Región:</div>', unsafe_allow_html=True)
-    region = c[1].selectbox("Región", opciones_region, index=idx_region, label_visibility="collapsed")
-    c[2].markdown('<div class="flabel">Desde:</div>', unsafe_allow_html=True)
-    desde_f = c[3].date_input("Desde", value=f_min, min_value=f_min, max_value=f_max,
-                              format="DD/MM/YYYY", label_visibility="collapsed")
-    c[4].markdown('<div class="flabel">Hasta:</div>', unsafe_allow_html=True)
-    hasta_f = c[5].date_input("Hasta", value=f_max, min_value=f_min, max_value=f_max,
-                              format="DD/MM/YYYY", label_visibility="collapsed")
-    c[6].markdown('<div class="flabel">Fuente:</div>', unsafe_allow_html=True)
-    fuente = c[7].selectbox("Fuente", opciones_fuente, label_visibility="collapsed")
-    c[8].form_submit_button("Aplicar filtros", icon=":material/search:", type="primary", **STRETCH)
+    if pagina == "Predicciones":
+        c = st.columns([0.55, 2.0, 0.85, 1.5, 0.7, 1.6, 1.6])
+        c[0].markdown('<div class="flabel">Región:</div>', unsafe_allow_html=True)
+        region = c[1].selectbox("Región", opciones_region, index=idx_region, label_visibility="collapsed")
+        c[2].markdown('<div class="flabel">Fecha base:</div>', unsafe_allow_html=True)
+        fecha_base = c[3].date_input("Fecha base", value=f_max, min_value=f_min, max_value=f_max,
+                                  format="DD/MM/YYYY", label_visibility="collapsed")
+        c[4].markdown('<div class="flabel">Fuente:</div>', unsafe_allow_html=True)
+        fuente = c[5].selectbox("Fuente", opciones_fuente, label_visibility="collapsed")
+        c[6].form_submit_button("Aplicar filtros", icon=":material/search:", type="primary", **STRETCH)
+        desde_f = f_min
+        hasta_f = fecha_base
+    else:
+        c = st.columns([0.55, 2.0, 0.55, 1.35, 0.55, 1.35, 0.7, 1.6, 1.6])
+        c[0].markdown('<div class="flabel">Región:</div>', unsafe_allow_html=True)
+        region = c[1].selectbox("Región", opciones_region, index=idx_region, label_visibility="collapsed")
+        c[2].markdown('<div class="flabel">Desde:</div>', unsafe_allow_html=True)
+        desde_f = c[3].date_input("Desde", value=f_min, min_value=f_min, max_value=f_max,
+                                  format="DD/MM/YYYY", label_visibility="collapsed")
+        c[4].markdown('<div class="flabel">Hasta:</div>', unsafe_allow_html=True)
+        hasta_f = c[5].date_input("Hasta", value=f_max, min_value=f_min, max_value=f_max,
+                                  format="DD/MM/YYYY", label_visibility="collapsed")
+        c[6].markdown('<div class="flabel">Fuente:</div>', unsafe_allow_html=True)
+        fuente = c[7].selectbox("Fuente", opciones_fuente, label_visibility="collapsed")
+        c[8].form_submit_button("Aplicar filtros", icon=":material/search:", type="primary", **STRETCH)
 
 if desde_f > hasta_f:
     desde_f, hasta_f = hasta_f, desde_f
 
-ini = pd.Timestamp(desde_f)                    # primer día elegido
-fin_dia = pd.Timestamp(hasta_f)                # último día elegido (incluido)
-fin = fin_dia + pd.Timedelta(days=1)           # límite superior, no incluido
-desde, hasta = ini.year, fin_dia.year          # años del rango (para el calendario y los gráficos anuales)
+ini = pd.Timestamp(desde_f)
+fin_dia = pd.Timestamp(hasta_f)
+fin = fin_dia + pd.Timedelta(days=1)
+desde, hasta = ini.year, fin_dia.year
 
 df = filtrar_detecciones(region, ini, fin, fuente)
 nombre_region = "Chile" if region == TODO_CHILE else f"{region}, Chile"
-
 # ═════════════════════════ Métricas ═════════════════════════
 anual = df.groupby("año", observed=True).size()
 total = len(df)
